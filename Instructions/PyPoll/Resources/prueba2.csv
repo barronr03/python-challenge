@@ -1,0 +1,37 @@
+import csv
+
+with open('election_data.csv') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader) # skip header row
+
+    total_votes = 0
+    candidate_votes = {} # dictionary to store vote count for each candidate
+    candidates = set() # set to store unique candidates
+
+    # count votes for each candidate
+    for row in csvreader:
+        total_votes += 1
+        candidate = row[2]
+        candidates.add(candidate)
+        if candidate in candidate_votes:
+            candidate_votes[candidate] += 1
+        else:
+            candidate_votes[candidate] = 1
+
+print("Election Results")
+print("----------------------------")
+print(f'Total Votes: {total_votes}')
+print("----------------------------")
+
+# print vote count and percentage for each candidate
+for candidate in candidates:
+    vote_count = candidate_votes.get(candidate, 0)
+    vote_percentage = round((vote_count / total_votes) * 100, 3)
+    print(f'{candidate}: {vote_percentage}% ({vote_count})')
+
+print("----------------------------")
+
+# determine the winner of the election
+winner = max(candidate_votes, key=candidate_votes.get)
+print(f'Winner: {winner}')
+
